@@ -1,0 +1,6 @@
+public class InvestmentAccount extends Account {
+    public InvestmentAccount() { super(); }
+    public InvestmentAccount(int accountNumber, double balance) {
+        super(accountNumber, balance);
+    }
+}
