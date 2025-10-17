@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Bank.RegisterViewController">
+   <children>
+      <Label layoutX="220.0" layoutY="14.0" text="Register New User">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Label>
+      <TextField fx:id="customerIdField" layoutX="152.0" layoutY="82.0" promptText="Customer ID" />
+      <TextField fx:id="customerNameField" layoutX="152.0" layoutY="126.0" promptText="Full Name" />
+      <TextField fx:id="addressField" layoutX="152.0" layoutY="170.0" promptText="Address" />
+      <TextField fx:id="phoneField" layoutX="152.0" layoutY="214.0" promptText="Phone" />
+      <Button layoutX="152.0" layoutY="270.0" mnemonicParsing="false" onAction="#onRegister" text="Register" />
+      <Button layoutX="240.0" layoutY="270.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel" />
+   </children>
+</AnchorPane>
