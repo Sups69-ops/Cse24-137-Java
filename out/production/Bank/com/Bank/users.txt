@@ -1,0 +1,3 @@
+CS001,Thuso Nkedo,Gabs01,71717171,password
+CS002,Dinewang Dikeledi,gabs21,7100022,password
+CS003,Andile Jale,bots100,7854555,password
