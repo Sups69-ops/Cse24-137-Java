@@ -1,19 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Bank.TransactionViewController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Bank.TransactionViewController">
    <children>
       <Label fx:id="titleLabel" layoutX="220.0" layoutY="14.0" text="Transaction">
          <font>
             <Font size="28.0" />
          </font>
       </Label>
-      <TextField fx:id="amountField" layoutX="226.0" layoutY="100.0" promptText="Enter Amount" />
-      <ChoiceBox fx:id="accountTypeChoice" layoutX="226.0" layoutY="150.0" prefWidth="150.0" />
-      <Label fx:id="currentBalanceLabel" layoutX="226.0" layoutY="190.0" text="Current Balance: " />
+   <TextField fx:id="amountField" layoutX="227.0" layoutY="109.0" promptText="Enter Amount" />
+
+   <!-- Choice box to select which account (by account number) to transact on -->
+   <ChoiceBox fx:id="accountChoice" layoutX="226.0" layoutY="70.0" prefHeight="25.0" prefWidth="150.0" />
+   <Label layoutX="226.0" layoutY="50.0" text="Select Account:" />
+
+   <!-- Choice box for account type (user may change type when transacting) -->
+   <ChoiceBox fx:id="accountTypeChoice" layoutX="226.0" layoutY="150.0" prefWidth="150.0" />
+   <Label fx:id="currentBalanceLabel" layoutX="226.0" layoutY="190.0" text="Current Balance: " />
       <Button layoutX="226.0" layoutY="250.0" mnemonicParsing="false" onAction="#onSubmit" text="Submit" />
       <Button layoutX="300.0" layoutY="250.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel" />
       <Label fx:id="errorMessage" layoutX="226.0" layoutY="290.0" textFill="RED" visible="false" wrapText="true" />

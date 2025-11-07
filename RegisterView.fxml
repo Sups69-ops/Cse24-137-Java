@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Bank.RegisterViewController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Bank.RegisterViewController">
    <children>
       <Label layoutX="220.0" layoutY="14.0" text="Register New User">
          <font>
             <Font size="28.0" />
          </font>
       </Label>
-      <TextField fx:id="customerIdField" layoutX="152.0" layoutY="82.0" promptText="Customer ID" />
-      <TextField fx:id="customerNameField" layoutX="152.0" layoutY="126.0" promptText="Full Name" />
-      <TextField fx:id="addressField" layoutX="152.0" layoutY="170.0" promptText="Address" />
-      <TextField fx:id="phoneField" layoutX="152.0" layoutY="214.0" promptText="Phone" />
-      <Button layoutX="152.0" layoutY="270.0" mnemonicParsing="false" onAction="#onRegister" text="Register" />
-      <Button layoutX="240.0" layoutY="270.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel" />
+   <TextField fx:id="customerIdField" layoutX="152.0" layoutY="82.0" promptText="Customer ID" />
+   <TextField fx:id="customerNameField" layoutX="152.0" layoutY="126.0" promptText="Full Name" />
+   <PasswordField fx:id="passwordField" layoutX="152.0" layoutY="170.0" promptText="Password" />
+   <TextField fx:id="addressField" layoutX="152.0" layoutY="214.0" promptText="Address" />
+   <TextField fx:id="phoneField" layoutX="152.0" layoutY="258.0" promptText="Phone" />
+
+   <!-- Optional initial account type for new users -->
+   <Label layoutX="36.0" layoutY="296.0" text="Initial Account Type" />
+   <ChoiceBox fx:id="initialAccountType" layoutX="152.0" layoutY="292.0" prefWidth="150.0" />
+      <Button layoutX="152.0" layoutY="343.0" mnemonicParsing="false" onAction="#onRegister" text="Register" />
+      <Button layoutX="248.0" layoutY="343.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel" />
    </children>
 </AnchorPane>

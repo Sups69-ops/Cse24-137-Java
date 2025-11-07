@@ -9,7 +9,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ChoiceBox;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.sql.SQLException;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.util.StringConverter;
+import java.util.List;
 
 /**
  * Controller for handling deposit and withdraw operations.
@@ -19,10 +23,12 @@ public class TransactionViewController {
     @FXML private TextField amountField;
     @FXML private Label errorMessage;
     @FXML private ChoiceBox<String> accountTypeChoice;
+    @FXML private ChoiceBox<Account> accountChoice;
     @FXML private Label currentBalanceLabel;
 
     private TransactionType transactionType;
     private Account currentAccount;
+    private String customerId;
 
     public enum TransactionType {
         DEPOSIT,
@@ -34,6 +40,32 @@ public class TransactionViewController {
         // Hide error label and populate choice box with account types
         errorMessage.setVisible(false);
         accountTypeChoice.setItems(FXCollections.observableArrayList("SAVINGS", "INVESTMENTS", "CHEQUE"));
+        // Configure accountChoice to show a friendly label for Account objects
+        if (accountChoice != null) {
+            accountChoice.setConverter(new StringConverter<Account>() {
+                @Override
+                public String toString(Account acct) {
+                    if (acct == null) return "";
+                    return String.format("%s — %s — %.2f", acct.getAccountNumber(), acct.getAccountType(), acct.getBalance());
+                }
+
+                @Override
+                public Account fromString(String string) {
+                    // Not used
+                    return null;
+                }
+            });
+
+            accountChoice.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+                if (newVal != null) {
+                    currentAccount = newVal;
+                    currentBalanceLabel.setText("Current Balance: " + String.format("%.2f", currentAccount.getBalance()));
+                    if (currentAccount.getAccountType() != null) {
+                        accountTypeChoice.setValue(currentAccount.getAccountType());
+                    }
+                }
+            });
+        }
     }
 
     /**
@@ -50,10 +82,21 @@ public class TransactionViewController {
     public void setAccountData(Account account) {
         this.currentAccount = account;
         if (currentAccount != null) {
-            currentBalanceLabel.setText("Current Balance: " + String.format("%.2f", currentAccount.getBalance()));
-            // Select the account type in the choice box if it matches one of the values
-            if (currentAccount.getAccountType() != null) {
-                accountTypeChoice.setValue(currentAccount.getAccountType());
+            this.customerId = currentAccount.getCustomerId();
+            try {
+                // Populate accountChoice with Account objects belonging to this customer via DAO
+                List<Account> accounts = AccountDAO.getAccountsForCustomer(this.customerId);
+                ObservableList<Account> customerAccounts = FXCollections.observableArrayList(accounts);
+                accountChoice.setItems(customerAccounts);
+                // Select the account that was passed in
+                accountChoice.setValue(currentAccount);
+                // Update balance and account type UI
+                currentBalanceLabel.setText("Current Balance: " + String.format("%.2f", currentAccount.getBalance()));
+                if (currentAccount.getAccountType() != null) {
+                    accountTypeChoice.setValue(currentAccount.getAccountType());
+                }
+            } catch (Exception e) {
+                showError("Error loading accounts: " + e.getMessage());
             }
         }
     }
@@ -67,32 +110,46 @@ public class TransactionViewController {
                 return;
             }
 
+            // Determine which account the user selected to operate on
+            Account target = accountChoice.getValue();
+            if (target == null) {
+                showError("Please select an account to operate on");
+                return;
+            }
+
             double newBalance;
             if (transactionType == TransactionType.DEPOSIT) {
-                newBalance = currentAccount.getBalance() + amount;
+                newBalance = target.getBalance() + amount;
             } else {
-                if (amount > currentAccount.getBalance()) {
+                if (amount > target.getBalance()) {
                     showError("Insufficient funds");
                     return;
                 }
-                newBalance = currentAccount.getBalance() - amount;
+                newBalance = target.getBalance() - amount;
             }
 
-        // Update account balance and account type (if user changed it)
-        String selectedType = accountTypeChoice.getValue();
-        Account updatedAccount = new Account(
-            currentAccount.getAccountNumber(),
-            currentAccount.getCustomerId(),
-            newBalance,
-            selectedType != null ? selectedType : currentAccount.getAccountType(),
-            currentAccount.getBranch()
-        );
-        AccountFileManager.updateAccount(updatedAccount);
-            navigateToAccount();
+            // Update account balance and account type (if user changed it)
+            String selectedType = accountTypeChoice.getValue();
+            Account updatedAccount = new Account(
+                target.getAccountNumber(),
+                target.getCustomerId(),
+                newBalance,
+                selectedType != null ? selectedType : target.getAccountType(),
+                target.getBranch()
+            );
+            try {
+                AccountDAO.updateAccount(updatedAccount);
+                // record transaction
+                String typeStr = (transactionType == TransactionType.DEPOSIT) ? "DEPOSIT" : "WITHDRAW";
+                TransactionDAO.createTransaction(updatedAccount.getAccountNumber(), typeStr, amount);
+                navigateToAccount();
+            } catch (SQLException e) {
+                showError("Database error: " + e.getMessage());
+            }
 
         } catch (NumberFormatException e) {
             showError("Please enter a valid amount");
-        } catch (IOException e) {
+        } catch (Exception e) {
             showError("Error processing transaction: " + e.getMessage());
         }
     }
