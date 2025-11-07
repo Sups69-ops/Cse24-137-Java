@@ -1,0 +1,17 @@
+# Build output
+out/
+*.class
+
+# SQLite DB file
+bank.db
+
+# IDE settings
+.idea/
+*.iml
+
+# OS files
+Thumbs.db
+*.log
+
+# Node / other
+node_modules/

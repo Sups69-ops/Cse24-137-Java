@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="300.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.Bank.NewAccountController">
+   <children>
+      <Label layoutX="180.0" layoutY="14.0" text="Create Account">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="50.0" layoutY="70.0" text="Account Type:" />
+      <ChoiceBox fx:id="accountTypeChoice" layoutX="150.0" layoutY="65.0" prefHeight="25.0" prefWidth="149.0" />
+      <Label layoutX="50.0" layoutY="110.0" text="Initial Balance:" />
+      <TextField fx:id="initialBalanceField" layoutX="150.0" layoutY="105.0" promptText="0.00" />
+      <Button layoutX="150.0" layoutY="160.0" mnemonicParsing="false" onAction="#onCreate" text="Create" />
+      <Button layoutX="240.0" layoutY="160.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel" />
+      <Label fx:id="statusLabel" layoutX="150.0" layoutY="200.0" textFill="RED" />
+   </children>
+</AnchorPane>

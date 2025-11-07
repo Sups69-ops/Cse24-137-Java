@@ -1,3 +1,5 @@
+package com.Bank;
+
 public class Customer {
     private String customerID;
     private String customerName;
